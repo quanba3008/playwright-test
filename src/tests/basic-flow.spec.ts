@@ -179,7 +179,7 @@ test('Search space and booking...', async ({ page, context }) => {
   await page.waitForTimeout(300);
   
   await expect(
-    page.getByRole('button', { name: 'Pay by credit card' })
+    page.getByRole('button', { name: 'Pay by credit card - failure_testing' })
   ).toBeVisible();
   
   //////// Booking step //////////////////////////////////////////////////////////////
