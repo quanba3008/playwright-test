@@ -4,6 +4,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "debug": "DEBUG=pw:api npx playwright test tests/basic-flow.spec.ts",
     "test": "npx playwright test tests/basic-flow.spec.ts"
   },
   "keywords": [],

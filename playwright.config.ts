@@ -5,6 +5,7 @@ export default defineConfig({
   retries: 3,
   reporter: [['dot'], ['./src/helpers/slack-notify.ts']],
   use: {
+    timezoneId: 'Asia/Tokyo',
     headless: true,
     baseURL: 'https://stg-cloak.ecbo.io/en',
     viewport: { width: 1600, height: 900 },

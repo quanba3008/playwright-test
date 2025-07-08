@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Locator } from '@playwright/test';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -46,21 +46,32 @@ test('Search space and booking...', async ({ page, context }) => {
   const allSpaces = await page.locator('strong[class^="SpaceCard_nameText"]').allTextContents();
   console.log('🧾 Found spaces:', allSpaces);
 
-  const selectCard = page.locator('strong[class^="SpaceCard_nameText"]', { hasText: process.env.TEST_SPACE! });
-  await expect(selectCard).toBeVisible();
+  // Select correct card based on name and click directly
+  let selectCard: Locator | null = null;
+  const cards = page.locator('a[class^="SpaceCard_spaceLink"]');
+  const countCards = await cards.count();
 
-  // Click pick space
-  const cardLink = selectCard.locator('xpath=ancestor::a');
-  await cardLink.scrollIntoViewIfNeeded();
-  const overlay = cardLink.locator('[class^="SpaceCard_unvailableOverlay"]');
+  for (let i = 0; i < countCards; i++) {
+    const card = cards.nth(i);
+    const name = await card.locator('strong[class^="SpaceCard_nameText"]').textContent();
+    const trimmedName = name?.trim();
 
-  if (await overlay.isVisible()) {
-    console.warn(`⚠️ Space "${process.env.TEST_SPACE}" is unavailable — skipping click.`);
-    return;
+    if (trimmedName === process.env.TEST_SPACE) {
+      console.log(`🔍 Found matching card: "${trimmedName}" at index ${i}`);
+
+      await card.scrollIntoViewIfNeeded();
+      await expect(card).toBeVisible({ timeout: 3000 });
+      await card.click();
+
+      console.log(`📍 Clicked space card: "${trimmedName}"`);
+      selectCard = card;
+      break;
+    }
   }
-  await expect(cardLink).toBeVisible();
-  await cardLink.click();
-  console.log(`📍 Click space card: ${process.env.TEST_SPACE!}`);
+
+  if (!selectCard) {
+    throw new Error(`❌ No matching space card found: "${process.env.TEST_SPACE}"`);
+  }
 
   await page.waitForTimeout(500); 
 
