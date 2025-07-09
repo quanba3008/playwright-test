@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "debug": "DEBUG=pw:api npx playwright test tests/basic-flow.spec.ts",
-    "test": "npx playwright test tests/basic-flow.spec.ts"
+    "test": "npx playwright test tests/basic-flow.spec.ts",
+    "record-session": "node --loader ts-node/esm src/helpers/record-google-session.ts"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +16,7 @@
     "@playwright/test": "^1.53.1",
     "@types/node": "^24.0.3",
     "@types/node-fetch": "^2.6.12",
+    "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   },
   "dependencies": {

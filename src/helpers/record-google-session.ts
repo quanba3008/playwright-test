@@ -14,5 +14,6 @@ import { chromium } from 'playwright';
     await context.storageState({ path: 'storageState.json' });
     await browser.close();
     console.log('✅ Saved session into storageState.json');
+    process.stdin.pause();
   });
 })();
